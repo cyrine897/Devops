@@ -28,7 +28,7 @@ pipeline {
                 echo "Running SonarQube Analysis"
                 script {
                     def scannerHome = tool 'SonarScanner' // Ensure this name is correct
-                    sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=devops-key -Dsonar.sources=src -Dsonar.host.url=http://localhost:9000"
+                    sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=devops-key -Dsonar.sources=src -Dsonar.host.url=http://localhost:9000 -Dsonar.login=cyrine"
                 }
             }
         }
