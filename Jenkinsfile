@@ -31,10 +31,10 @@ pipeline {
                 echo "Running SonarQube Analysis"
                 script {
                     // Définir le chemin vers l'outil SonarQube Scanner
-                    def scannerHome = tool 'SonarQubeScanner' // Assurez-vous que le nom correspond à votre configuration
+                    def scannerHome = tool 'SonarScanner' // Assurez-vous que le nom correspond à votre configuration
                     // Exécuter l'analyse SonarQube
                     withSonarQubeEnv('SonarQube') { // Vérifiez le nom de la configuration SonarQube
-                        sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=devops-key -Dsonar.sources=src -Dsonar.host.url=http://localhost:9000"
+                        sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=devops-key -Dsonar.sources=src -Dsonar.host.url=http://localhost:9000 -Dsonar.login=sqp_81e2dbaf06da7af89055ae97c8b1208c2e65214b"
                     }
                 }
             }
