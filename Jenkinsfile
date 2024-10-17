@@ -23,24 +23,9 @@ pipeline {
             }
         }
 
-        stage('SonarQube Analysis') {
+        stage('Sonarqube') {
             steps {
-                echo "Running SonarQube Analysis"
-                script {
-                    def scannerHome = tool 'SonarScanner' // Ensure this name is correct
-                    
-                    // Use withCredentials to retrieve the token securely
-                    withCredentials([string(credentialsId: 'sonarqueb-token', variable: 'SONAR_TOKEN')]) {
-                        // Use bash explicitly
-                        sh """
-                            ${scannerHome}/bin/sonar-scanner -X \
-                            -Dsonar.projectKey=devops-key \
-                            -Dsonar.sources=src \
-                            -Dsonar.host.url=http://localhost:9000 \
-                            -Dsonar.login=${SONAR_TOKEN}
-                        """
-                    }
-                }
+                sh 'mvn sonar:sonar -Dsonar.login=admin -Dsonar.password=22922325Rr24.'
             }
         }
 
