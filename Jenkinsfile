@@ -16,10 +16,24 @@ pipeline {
             }
         }
         
-        stage('Deploy') {
+        stage('SonarQube Analysis') {
             steps {
-                echo 'Deploying the application...'
-                // Ajouter ici les commandes de déploiement nécessaires
+                echo 'Running SonarQube Analysis...'
+                script {
+                    // Ajoutez le scanner SonarQube avec les paramètres appropriés
+                    withSonarQubeEnv('SonarQube') { // 'SonarQube' correspond à l'ID du serveur configuré
+                        sh 'mvn sonar:sonar -Dsonar.projectKey=devops-key -Dsonar.host.url=http://localhost:9000'
+                    }
+                }
+            }
+        }
+
+        stage('Quality Gate') {
+            steps {
+                echo 'Waiting for SonarQube Quality Gate...'
+                timeout(time: 10, unit: 'MINUTES') {
+                    waitForQualityGate abortPipeline: true
+                }
             }
         }
     }
