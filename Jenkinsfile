@@ -28,12 +28,22 @@ pipeline {
                 echo "Running SonarQube Analysis"
                 script {
                     def scannerHome = tool 'SonarScanner' // Ensure this name is correct
-                    def sonarToken = credentials('sonarqube-token') // Reference the secret token
-                    // Use bash explicitly
-                    sh "bash -c '${scannerHome}/bin/sonar-scanner -X -Dsonar.projectKey=devops-key -Dsonar.sources=src -Dsonar.host.url=http://localhost:9000 -Dsonar.login=${sonarToken}'"
+                    
+                    // Use withCredentials to retrieve the token securely
+                    withCredentials([string(credentialsId: 'sonarqueb-token', variable: 'SONAR_TOKEN')]) {
+                        // Use bash explicitly
+                        sh """
+                            ${scannerHome}/bin/sonar-scanner -X \
+                            -Dsonar.projectKey=devops-key \
+                            -Dsonar.sources=src \
+                            -Dsonar.host.url=http://localhost:9000 \
+                            -Dsonar.login=${SONAR_TOKEN}
+                        """
+                    }
                 }
             }
         }
+
 
         stage('Quality Gate') {
             steps {
