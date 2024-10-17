@@ -28,7 +28,16 @@ pipeline {
                 echo "Running SonarQube Analysis"
                 script {
                     def scannerHome = tool 'SonarScanner' // Ensure this name is correct
-                    sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=devops-key -Dsonar.sources=src -Dsonar.host.url=http://localhost:9000"
+                    def sonarqubeUsername = 'cyrine' // Replace with your SonarQube username
+                    def sonarqubePassword = 'sqp_81e2dbaf06da7af89055ae97c8b1208c2e65214b' // Replace with your SonarQube password
+
+                    // Prepare SonarQube command with credentials
+                    sh "${scannerHome}/bin/sonar-scanner " +
+                       "-Dsonar.projectKey=devops-key " +
+                       "-Dsonar.sources=src " +
+                       "-Dsonar.host.url=http://localhost:9000 " +
+                       "-Dsonar.login=${sonarqubeUsername} " +
+                       "-Dsonar.password=${sonarqubePassword}"
                 }
             }
         }
