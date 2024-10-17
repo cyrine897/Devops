@@ -29,7 +29,8 @@ pipeline {
                 script {
                     def scannerHome = tool 'SonarScanner' // Ensure this name is correct
                     def sonarToken = credentials('sonarqueb-token') // Reference the secret token
-                    sh "${scannerHome}/bin/sonar-scanner -X -Dsonar.projectKey=devops-key -Dsonar.sources=src -Dsonar.host.url=http://localhost:9000 -Dsonar.login=${sonarToken}"
+                    // Use bash explicitly
+                    sh "bash -c '${scannerHome}/bin/sonar-scanner -X -Dsonar.projectKey=devops-key -Dsonar.sources=src -Dsonar.host.url=http://localhost:9000 -Dsonar.login=${sonarToken}'"
                 }
             }
         }
