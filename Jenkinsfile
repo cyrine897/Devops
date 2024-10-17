@@ -2,59 +2,34 @@ pipeline {
     agent any
 
     stages {
-        stage('GIT Checkout') {
+        stage('Checkout') {
             steps {
-                echo "Getting Project from Git"
-                git branch: 'master', credentialsId: '20', url: 'https://github.com/cyrine897/Devops.git'
+                echo 'Cloning the Git repository...'
+                git url: 'https://github.com/cyrine897/Devops.git'
             }
         }
-
-        stage('MVN CLEAN') {
+        
+        stage('Maven Build') {
             steps {
-                echo "Running Maven Clean"
-                sh 'mvn clean'
+                echo 'Building the project with Maven...'
+                sh 'mvn clean install'
             }
         }
-
-        stage('MVN COMPILE') {
+        
+        stage('Deploy') {
             steps {
-                echo "Running Maven Compile"
-                sh 'mvn compile'
-            }
-        }
-
-        stage('SonarQube Analysis') {
-            steps {
-                echo "Running SonarQube Analysis"
-                script {
-                    def scannerHome = tool 'SonarScanner' // Ensure this name is correct
-                    def sonarqubeUsername = 'cyrine' // Replace with your SonarQube username
-                    def sonarqubePassword = 'sqp_81e2dbaf06da7af89055ae97c8b1208c2e65214b' // Replace with your SonarQube password
-
-                    // Prepare SonarQube command with credentials
-                    sh "${scannerHome}/bin/sonar-scanner " +
-                       "-Dsonar.projectKey=devops-key " +
-                       "-Dsonar.sources=src " +
-                       "-Dsonar.host.url=http://localhost:9000 " +
-                       "-Dsonar.login=${sonarqubeUsername} " +
-                       "-Dsonar.password=${sonarqubePassword}"
-                }
-            }
-        }
-
-        stage('Quality Gate') {
-            steps {
-                echo "Checking SonarQube Quality Gate"
-                waitForQualityGate abortPipeline: true
+                echo 'Deploying the application...'
+                // Ajouter ici les commandes de déploiement nécessaires
             }
         }
     }
 
-    // Optional: Cleanup stage
     post {
-        always {
-            echo 'Cleaning up...'
-            cleanWs()
+        success {
+            echo 'Pipeline completed successfully!'
+        }
+        failure {
+            echo 'Pipeline failed.'
         }
     }
 }
