@@ -28,7 +28,7 @@ pipeline {
                 echo "Running SonarQube Analysis"
                 script {
                     def scannerHome = tool 'SonarScanner' // Ensure this name is correct
-                    def sonarToken = credentials('sonarqueb-token') // Reference the secret token
+                    def sonarToken = credentials('sonarqube-token') // Reference the secret token
                     // Use bash explicitly
                     sh "bash -c '${scannerHome}/bin/sonar-scanner -X -Dsonar.projectKey=devops-key -Dsonar.sources=src -Dsonar.host.url=http://localhost:9000 -Dsonar.login=${sonarToken}'"
                 }
