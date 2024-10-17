@@ -2,49 +2,50 @@ pipeline {
     agent any
 
     stages {
-        stage('Checkout') {
+        stage('GIT Checkout') {
             steps {
-                echo 'Cloning the Git repository...'
-                git url: 'https://github.com/cyrine897/Devops.git'
+                echo "Getting Project from Git"
+                git branch: 'master', credentialsId: '20', url: 'https://github.com/cyrine897/Devops.git'
             }
         }
-        
-        stage('Maven Build') {
+
+        stage('MVN CLEAN') {
             steps {
-                echo 'Building the project with Maven...'
-                sh 'mvn clean install'
+                echo "Running Maven Clean"
+                sh 'mvn clean'
             }
         }
-        
-        
+
+        stage('MVN COMPILE') {
+            steps {
+                echo "Running Maven Compile"
+                sh 'mvn compile'
+            }
+        }
+
         stage('SonarQube Analysis') {
             steps {
-                echo 'Running SonarQube Analysis...'
+                echo "Running SonarQube Analysis"
                 script {
-                    // Ajoutez le scanner SonarQube avec les paramètres appropriés
-                    withSonarQubeEnv('SonarQube') { // 'SonarQube' correspond à l'ID du serveur configuré
-                        sh 'mvn sonar:sonar -Dsonar.projectKey=devops-key -Dsonar.host.url=http://localhost:9000'
-                    }
+                    def scannerHome = tool 'SonarScanner' // Ensure this name is correct
+                    sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=devops-key -Dsonar.sources=src -Dsonar.host.url=http://localhost:9000"
                 }
             }
         }
 
         stage('Quality Gate') {
             steps {
-                echo 'Waiting for SonarQube Quality Gate...'
-                timeout(time: 10, unit: 'MINUTES') {
-                    waitForQualityGate abortPipeline: true
-                }
+                echo "Checking SonarQube Quality Gate"
+                waitForQualityGate abortPipeline: true
             }
         }
     }
 
+    // Optional: Cleanup stage
     post {
-        success {
-            echo 'Pipeline completed successfully!'
-        }
-        failure {
-            echo 'Pipeline failed.'
+        always {
+            echo 'Cleaning up...'
+            cleanWs()
         }
     }
 }
