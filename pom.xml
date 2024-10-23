@@ -48,33 +48,7 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-              <dependency>
-        <groupId>org.junit.jupiter</groupId>
-        <artifactId>junit-jupiter-api</artifactId>
-        <version>5.7.0</version>
-        <scope>test</scope>
-    </dependency>
-    <dependency>
-        <groupId>org.junit.jupiter</groupId>
-        <artifactId>junit-jupiter-engine</artifactId>
-        <version>5.7.0</version>
-        <scope>test</scope>
-    </dependency>
-
-    <!-- Mockito -->
-    <dependency>
-        <groupId>org.mockito</groupId>
-        <artifactId>mockito-core</artifactId>
-        <version>3.6.0</version>
-        <scope>test</scope>
-    </dependency>
-
-    <!-- Optional dependencies for your entities -->
-    <dependency>
-        <groupId>tn.esprit.spring</groupId>
-        <artifactId>spring-entities</artifactId>
-        <version>1.0.0</version> <!-- Assurez-vous que cette version existe -->
-    </dependency>
+             
     </dependencies>
     
     <distributionManagement>
