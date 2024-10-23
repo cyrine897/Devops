@@ -28,6 +28,12 @@ pipeline {
                 sh 'mvn sonar:sonar -Dsonar.login=admin -Dsonar.password=22922325Rr24.'
             }
         }
+                stage('Deploy to Nexus') {
+            steps {
+                sh 'mvn deploy'
+            }
+        }
+
 
 
         stage('Quality Gate') {
